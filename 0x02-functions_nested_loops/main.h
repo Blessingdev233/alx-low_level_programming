@@ -1,5 +1,5 @@
-#ifndef ALX_H_
-#define ALX_H_
+#ifndef _PUTCHAR_H_
+#define _PUTCHAR_H_
 
 int _putchar(char c);
 void print_alphabet(void);
