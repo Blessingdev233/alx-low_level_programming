@@ -1,4 +1,4 @@
-#include "holberton.h"
+#include "mainn.h"
 
 /**
  * _strncat - Concatenates two stings
