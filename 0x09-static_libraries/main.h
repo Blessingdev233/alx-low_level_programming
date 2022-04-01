@@ -1,8 +1,5 @@
-#ifndef MAIN_H
-#define MAIN_H
-
-#include <stdio.h>
-#include <unistd.h>
+#ifndef FILE_HOLBERTON
+#define FILE_HOLBERTON
 
 int _putchar(char c);
 int _islower(int c);
