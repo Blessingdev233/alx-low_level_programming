@@ -1,180 +1,157 @@
+#include "main.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "main.h"
-
-void populateResult(char *dest, char *n1, int n1_len, char *n2, int n2_len);
-int getLengthOfNum(char *str);
-void print_result(char *src, int length);
-
 /**
- * main - entry point, multiplies two numbers
- *
- * @argc: integer, length of @argv
- *
- * @argv: one-dimensional array of strings, arguments of this program
- *
- * Return: 0, success
+ * str_len - finds string length
+ * @str: input pointer to string
+ * Return: length of string
  */
-int main(int argc, char *argv[])
+int str_len(char *str)
 {
-	int num1_length, num2_length;
-	char *result;
+	int len;
+
+	for (len = 0; *str != '\0'; len++)
+		len++, str++;
+	return (len / 2);
+}
+/**
+ * _calloc - allocates memory for an array using malloc
+ * @bytes: bytes of memory needed per size requested
+ * @size: size in bytes of each element
+ * Return: pointer to the allocated memory
+ */
+void *_calloc(unsigned int bytes, unsigned int size)
+{
+	unsigned int i;
+	char *p;
+
+	if (bytes == 0 || size == 0)
+		return (NULL);
+	if (size >= UINT_MAX / bytes || bytes >= UINT_MAX / size)
+		return (NULL);
+	p = malloc(size * bytes);
+	if (p == NULL)
+		return (NULL);
+	for (i = 0; i < bytes * size; i++)
+		p[i] = 0;
+	return ((void *)p);
+}
+/**
+ * add_arrays - adds 2 arrays of ints
+ * @mul_result: pointer to array with numbers from product
+ * @sum_result: pointer to array with numbers from total sum
+ * @len_r: length of both arrays
+ * Return: void
+ */
+void add_arrays(int *mul_result, int *sum_result, int len_r)
+{
+	int i = 0, len_r2 = len_r - 1, carry = 0, sum;
+
+	while (i < len_r)
+	{
+		sum = carry + mul_result[len_r2] + sum_result[len_r2];
+		sum_result[len_r2] = sum % 10;
+		carry = sum / 10;
+		i++;
+		len_r2--;
+	}
+}
+/**
+ * is_digit - checks for digits
+ * @c: input character to check for digit
+ * Return: 0 failure, 1 success
+ */
+int is_digit(char c)
+{
+	if (c >= '0' && c <= '9')
+		return (1);
+	printf("Error\n");
+	return (0);
+}
+/**
+ * multiply - multiplies 2 #'s, prints result, must be 2 #'s
+ * @num1: factor # 1 (is the smaller of 2 numbers)
+ * @len_1: length of factor 1
+ * @num2: factor # 2 (is the larger of 2 numbers)
+ * @len_2: length of factor 2
+ * @len_r: length of result arrays
+ * Return: 0 fail, 1 success
+ */
+int *multiply(char *num1, int len_1, char *num2, int len_2, int len_r)
+{
+	int i = 0, i1 = len_1 - 1;
+	int i2, product, carry, digit, *mul_result, *sum_result;
+
+	sum_result = _calloc(sizeof(int), (len_r));
+	while (i < len_1)
+	{
+		mul_result = _calloc(sizeof(int), len_r);
+		i2 = len_2 - 1, digit = (len_r - 1 - i);
+		if (!is_digit(num1[i1]))
+			return (NULL);
+		carry = 0;
+		while (i2 >= 0)
+		{
+			if (!is_digit(num2[i2]))
+				return (NULL);
+			product = (num1[i1] - '0') * (num2[i2] - '0');
+			product += carry;
+			mul_result[digit] += product % 10;
+			carry = product / 10;
+			digit--, i2--;
+		}
+		add_arrays(mul_result, sum_result, len_r);
+		free(mul_result);
+	    i++, i1--;
+	}
+	return (sum_result);
+}
+/**
+ * print_me - prints my array of the hopeful product here
+ * @sum_result: pointer to int array with numbers to add
+ * @len_r: length of result array
+ * Return: void
+ */
+void print_me(int *sum_result, int len_r)
+{
+	int i = 0;
+
+	while (sum_result[i] == 0 && i < len_r)
+		i++;
+	if (i == len_r)
+		_putchar('0');
+	while (i < len_r)
+		_putchar(sum_result[i++] + '0');
+	_putchar('\n');
+}
+/**
+ * main - multiply 2 input #'s of large lengths and print result or print Error
+ * @argc: input count of args
+ * @argv: input array of string args
+ * Return: 0, Success
+ */
+int main(int argc, char **argv)
+{
+	int len_1, len_2, len_r, temp, *sum_result;
+	char *num1, *num2;
 
 	if (argc != 3)
 	{
 		printf("Error\n");
 		exit(98);
 	}
-
-	num1_length = getLengthOfNum(argv[1]);
-
-	if (!num1_length)
-	{
-		printf("Error\n");
-		exit(98);
-	}
-
-	num2_length = getLengthOfNum(argv[2]);
-
-	if (!num2_length)
-	{
-		printf("Error\n");
-		exit(98);
-	}
-
-	result = malloc(num1_length + num2_length);
-
-	if (!result)
-		return (1);
-
-	populateResult(result, argv[1], num1_length, argv[2], num2_length);
-
-	print_result(result, num1_length + num2_length);
-	printf("\n");
-	free(result);
-
-	return (0);
-}
-
-/**
- * getLengthOfNum - length of numbers in a string
- *
- * @str: pointer to string of numbers
- *
- * Return: integer (SUCCESS) or
- * NULL, if string includes char
- */
-
-int getLengthOfNum(char *str)
-{
-	int i = 0;
-
-	while (str[i])
-	{
-		if (str[i] >= '0' && str[i] <= '9')
-			i++;
-		else
-			return ('\0');
-
-	}
-
-	return (i);
-}
-
-/**
- * populateResult - multiplies two numbers stored as string
- * and stores result in @dest
- *
- * @dest: pointer to where @num1 * @num2 should be stored
- *
- * @n1: positive number stored as string in an array
- *
- * @n2: positive number stored as string in an array
- *
- * @n1_len: length of @n1
- *
- * @n2_len: length of @n2
- */
-
-void populateResult(char *dest, char *n1, int n1_len, char *n2, int n2_len)
-{
-	int i, j, k, temp_value, non_carry_value;
-	int carry_value = 0;
-	char *multiplicand, *multiplier;
-
-	if (n1_len > n2_len)
-	{
-		i = n1_len - 1;
-		j = n2_len - 1;
-		multiplicand = n1;
-		multiplier = n2;
-	}
+	len_1 = str_len(argv[1]), len_2 = str_len(argv[2]);
+	len_r = len_1 + len_2;
+	if (len_1 < len_2)
+		num1 = argv[1], num2 = argv[2];
 	else
 	{
-		i = n2_len - 1;
-		j = n1_len - 1;
-		multiplicand = n2;
-		multiplier = n1;
+		num1 = argv[2], num2 = argv[1];
+		temp = len_2, len_2 = len_1, len_1 = temp;
 	}
-
-	while (i >= 0)
-	{
-		k = i;
-
-		while (k >= 0)
-		{
-			temp_value = ((multiplicand[k] - '0') * (multiplier[j] - '0'));
-			temp_value += carry_value;
-
-			if (j + 1 <= n2_len - 1 && dest[k + j + 1] >= '0' && dest[k + j + 1] <= '9')
-				temp_value += dest[k + j + 1] - '0';
-
-			if (temp_value < 10)
-			{
-				non_carry_value = temp_value;
-				carry_value = 0;
-			}
-			else
-			{
-				non_carry_value = temp_value % 10;
-				carry_value = temp_value / 10;
-			}
-
-			dest[k + j + 1] = non_carry_value + '0';
-			k--;
-		}
-
-		if (carry_value)
-			dest[k + j + 1] = carry_value + '0';
-
-		carry_value = 0;
-
-		if (j > 0)
-			j--;
-		else
-			i = -1;
-	}
-
-	free(dest);
-	free(multiplicand);
-	free(multiplier);
-}
-
-/**
- * print_result - prints numbers stored as string in a memory location
- *
- * @src: pointer to memory that stores numbers as strings
- *
- * @length: length of @src
- */
-
-void print_result(char *src, int length)
-{
-	int i;
-
-	for (i = 0; i < length; i++)
-	{
-		if (src[i] >= '0' && src[i] <= '9')
-		printf("%c", src[i]);
-	}
+	sum_result = multiply(num1, len_1, num2, len_2, len_r);
+	if (sum_result == NULL)
+		exit(98);
+	print_me(sum_result, len_r);
+	return (0);
 }
