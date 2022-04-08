@@ -1,7 +1,7 @@
 # Low level programming in C language :ledger:
 
 ![header](https://capsule-render.vercel.app/api?type=rect&color=gradient&height=1)
-<section>
+
 <hr>
  * **0. Hello World**
    * Writing first C language
@@ -18,4 +18,4 @@
  * **4. More functions and nested loops**
    * Nested loops
 <hr>
-</section>
+
