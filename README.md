@@ -1,4 +1,4 @@
-# Low level programming in C language
+# Low level programming in C language :ledger:
 <section>
 <hr>
 1.
