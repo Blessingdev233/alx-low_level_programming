@@ -18,4 +18,18 @@
  * **4. More functions and nested loops**
    * Nested loops
 
+ * **5. Pointers arrays and strings**
+   * Printing int, string length, string length in rev etc..
+
+ * **6. pointers arrays and string**
+   * print buffer, print an integer, concatenates two strings, copying strings etc..
+
+ * **7. pointers arrays and string**
+   * prints chessboard, function that locates substring, fill memory with constant bytes, copy memory area etc...
+
+ * **8. Recursion**
+   * string length recursion, prints a string followed by a new line, prints string in reverse etc...
+
+ * **9. Static Libraries**
+   * gcc -c *.c
 
