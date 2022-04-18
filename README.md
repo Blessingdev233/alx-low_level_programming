@@ -33,3 +33,5 @@
  * **9. Static Libraries**
    * gcc -c *.c
 
+* **9. Variadic functions**
+   * 
