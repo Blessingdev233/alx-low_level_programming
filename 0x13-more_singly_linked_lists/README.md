@@ -114,4 +114,5 @@ and functions written for the project.
   * [103-find_loop.c](./103-find_loop.c): C function that finds the loop contained in a
   `listint_t` linked list using a maximum of two variables.
     * If no loop is found - returns `NULL`.
-    * Otherwise - returns the address of the node where the loop starts.
+
+    * Otherwise - returns the address of the node where the loop starts
